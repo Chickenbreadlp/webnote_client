@@ -14,7 +14,10 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
-    '@nuxt/fonts'
+    '@nuxt/fonts',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
+    '@vite-pwa/nuxt'
   ],
   vite: {
     vue: {
@@ -22,5 +25,16 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
+  },
+  pwa: {
+    client: {
+      periodicSyncForUpdates: 120
+    }
+  },
+  runtimeConfig: {
+    public: {
+      offlineMode: false,
+      apiPort: 3001
+    }
   }
 })

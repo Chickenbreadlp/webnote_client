@@ -1,56 +1,55 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 
-const { xs, smAndDown } = useDisplay()
+const route = useRoute();
+const documentStore = useDocumentStore();
+const { xs } = useDisplay();
 
 const navOpen = ref(true);
+
+const pageTitle = computed(() => {
+  switch (route.name) {
+    case 'index':
+      return 'Einstellungen';
+    case 'new-text':
+      return 'Neues Textdokument';
+    case 'new-checklist':
+      return 'Neue Checkliste';
+    case 'documents-document':
+      return documentStore.documents.find(document => document.id === route.params.document)?.title;
+    case 'edit-text-document':
+    case 'edit-checklist-document':
+      return documentStore.documents.find(document => document.id === route.params.document)?.title + ' bearbeiten';
+    default:
+      return route.name;
+  }
+});
 </script>
 
 <template>
   <NuxtLayout>
+    <pwa-handler />
     <v-app>
       <v-layout>
         <v-navigation-drawer v-model="navOpen" mobile-breakpoint="sm">
-          <conn-status></conn-status>
-          <v-divider></v-divider>
-          <nav-list></nav-list>
+          <conn-status />
+          <v-divider />
+          <nav-list />
         </v-navigation-drawer>
 
         <v-app-bar color="primary">
           <template v-slot:prepend v-if="xs">
-            <v-app-bar-nav-icon @click.stop="navOpen = !navOpen"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click.stop="navOpen = !navOpen" />
           </template>
 
-          <v-app-bar-title>Current Page</v-app-bar-title>
+          <v-app-bar-title>{{ pageTitle }}</v-app-bar-title>
 
           <template v-slot:append>
-            <v-btn icon="mdi-pencil"></v-btn>
-            <v-btn icon>
-              <v-icon icon="mdi-dots-vertical" />
-
-              <v-menu activator="parent">
-                <v-list>
-                  <v-list-item>
-                    <template v-slot:prepend>
-                      <v-icon icon="mdi-delete" />
-                    </template>
-
-                    <v-list-item-title v-text="'Delete'" />
-                  </v-list-item>
-                  <v-list-item>
-                    <template v-slot:prepend>
-                      <v-icon icon="mdi-cog" />
-                    </template>
-
-                    <v-list-item-title v-text="'Settings'" />
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-btn>
+            <quick-options />
           </template>
         </v-app-bar>
 
-        <v-main class="d-flex align-center justify-center">
+        <v-main>
           <NuxtPage />
         </v-main>
       </v-layout>

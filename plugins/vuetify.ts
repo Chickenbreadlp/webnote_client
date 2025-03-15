@@ -12,8 +12,12 @@ export default defineNuxtPlugin((app) => {
             themes: {
                 dark: {
                     colors: {
-                        primary: colors.cyan.darken1,
-                        secondary: colors.teal.darken2,
+                        primary: colors.teal.base
+                    }
+                },
+                light: {
+                    colors: {
+                        primary: colors.teal.base
                     }
                 }
             }

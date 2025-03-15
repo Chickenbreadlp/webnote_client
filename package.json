@@ -9,14 +9,27 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chickenbreadlp/webnote_srv.git"
+  },
+  "author": "Chickenbread",
+  "license": "MIT",
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@nuxt/fonts": "^0.11.0",
+    "@pinia/nuxt": "^0.10.1",
+    "@vite-pwa/nuxt": "^0.10.6",
+    "luxon": "^3.5.0",
     "nuxt": "^3.16.0",
+    "pinia": "^3.0.1",
+    "pinia-plugin-persistedstate": "^4.2.0",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "vite-plugin-vuetify": "^2.1.0",
     "vuetify": "^3.7.16"
   }
