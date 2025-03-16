@@ -45,7 +45,6 @@ const documentLinks = computed(() => {
 
     <v-divider class="my-3" />
 
-
     <v-list-item
       v-for="(document) in documentLinks"
       :key="document.id"

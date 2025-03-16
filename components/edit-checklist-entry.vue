@@ -3,6 +3,7 @@ const { openDialog, prefillText, showAddNext } = defineProps<{
   openDialog: boolean;
   prefillText: string;
   showAddNext: boolean;
+  showChangedWarning: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -36,7 +37,23 @@ effect(() => {
     >
       <v-card>
         <v-card-text class="pa-4 pb-2">
-          <v-text-field v-model="entryText" label="Label" hide-details="auto" />
+          <v-text-field
+            v-model="entryText"
+            label="Label"
+            :hide-details="true"
+          />
+
+          <v-expand-transition>
+            <v-alert
+              v-show="showChangedWarning"
+              type="warning"
+              density="compact"
+              variant="tonal"
+              border="start"
+              text="Eintrag von einem anderen Nutzer bearbeitet"
+              class="rounded-t-0"
+            />
+          </v-expand-transition>
         </v-card-text>
         <v-card-actions>
           <v-btn

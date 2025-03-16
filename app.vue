@@ -3,6 +3,8 @@ import { useDisplay } from "vuetify";
 
 const route = useRoute();
 const documentStore = useDocumentStore();
+const netConn = useNetConn();
+
 const { xs } = useDisplay();
 
 const navOpen = ref(true);
@@ -53,6 +55,26 @@ const pageTitle = computed(() => {
           <NuxtPage />
         </v-main>
       </v-layout>
+
+      <v-overlay
+        :model-value="netConn.callbacks.length > 0"
+        location-strategy="connected"
+        scroll-strategy="none"
+        class="d-flex justify-center align-center"
+        persistent
+      >
+        <v-progress-circular
+          indeterminate
+          :size="100"
+          :width="5"
+        />
+      </v-overlay>
     </v-app>
   </NuxtLayout>
 </template>
+
+<style>
+.non-selectable {
+  user-select: none;
+}
+</style>

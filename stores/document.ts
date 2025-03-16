@@ -1,10 +1,10 @@
-import type { DocumentPage, DocumentChange } from "~/utils/types";
+import { type DocumentChange, type DocumentPage, WSMessageTypes } from '~/utils/types';
 
 export const useDocumentStore = defineStore(
     'documents',
     () => {
+        const runtimeConfig = useRuntimeConfig();
         const route = useRoute();
-        const settings = useSettingsStore();
         const netConn = useNetConn();
 
         const inProgressDocument = ref({
@@ -27,13 +27,20 @@ export const useDocumentStore = defineStore(
         })
 
         async function stageChange(change: DocumentChange) {
-            stagedChanges.value.push(change);
-
-            if (!settings.offlineClient) {
-                // TODO: implement netcode
+            if (runtimeConfig.public.offlineMode) {
+                applyChange(change);
             }
+            else {
+                let changeCommitted = false;
+                if (netConn.wsConnectionStatus === WSReadyState.OPEN) {
+                    changeCommitted = await netConn.postWithCallback(WSMessageTypes.CHANGE, { change });
+                }
 
-            applyChange(change);
+                if (!changeCommitted && !(change.type === 'update' && 'entryReorder' in change)) {
+                    stagedChanges.value.push(change);
+                    applyChange(change);
+                }
+            }
         }
         function applyChange(change: DocumentChange) {
             switch (change.type) {
@@ -56,7 +63,7 @@ export const useDocumentStore = defineStore(
                     break;
                 case 'update':
                     const documentId = documents.value.findIndex(document => document.id === change.document);
-                    if (documentId) {
+                    if (documentId !== -1) {
                         const document = documents.value[documentId];
 
                         if (change.textChange && 'text' in document) document.text = change.textChange;
@@ -89,6 +96,12 @@ export const useDocumentStore = defineStore(
                                 });
                             }
                         }
+                        if (typeof change.entryRemove === 'number' && 'entries' in document) {
+                            const index = document.entries.findIndex(entry => entry.id === change.entryRemove);
+                            if (index !== -1) {
+                                document.entries.splice(index, 1);
+                            }
+                        }
                         if (change.entryReorder && 'entries' in document) {
                             const newEntryOrder = [];
                             for (const entryId of change.entryReorder) {
@@ -108,6 +121,13 @@ export const useDocumentStore = defineStore(
                     break;
             }
         }
+
+        netConn.createStoreLink(
+            (docs: DocumentPage[]) => documents.value = docs,
+            applyChange,
+            () => ([...stagedChanges.value]),
+            () => stagedChanges.value = []
+        );
 
         return { documents, currentPageDocument, stagedChanges, stageChange, inProgressDocument, saveInProgress };
     },

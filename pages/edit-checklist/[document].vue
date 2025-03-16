@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 
 const router = useRouter();
 const documentStore = useDocumentStore();
+const netConn = useNetConn();
 
 const crossedClasses = 'text-medium-emphasis text-decoration-line-through';
 
@@ -26,6 +27,12 @@ watch(documentStore, () => {
 
       if (entry.id === editDialog.value.editId) {
         currentEditIndexFound = true;
+        if (
+          editDialog.value.currentEntryText !== entry.text &&
+          editDialog.value.open
+        ) {
+          editDialog.value.showChangedWarning = true;
+        }
       }
     }
 
@@ -53,7 +60,8 @@ const editDialog = ref({
   addOnTop: false,
   editIndex: -1,
   editId: -1,
-  currentEntryText: ''
+  currentEntryText: '',
+  showChangedWarning: false
 });
 function openCreateDialog(addOnTop: boolean) {
   editDialog.value = {
@@ -61,7 +69,8 @@ function openCreateDialog(addOnTop: boolean) {
     editIndex: -1,
     editId: -1,
     currentEntryText: '',
-    addOnTop
+    addOnTop,
+    showChangedWarning: false
   };
 }
 function openEditDialog(index: number) {
@@ -70,7 +79,8 @@ function openEditDialog(index: number) {
     editIndex: index,
     editId: list.value[index].id,
     currentEntryText: list.value[index].text,
-    addOnTop: false
+    addOnTop: false,
+    showChangedWarning: false
   };
 }
 
@@ -122,9 +132,13 @@ async function orderChanged() {
   await documentStore.stageChange(changeObj);
 }
 async function removeEntry(index: number) {
-  list.value.splice(index, 1);
-
-  await orderChanged()
+  const changeObj: DocumentChange = {
+    document: documentId,
+    timestamp: DateTime.utc().toISO(),
+    type: 'update',
+    entryRemove: list.value[index].id
+  };
+  await documentStore.stageChange(changeObj);
 }
 </script>
 
@@ -156,7 +170,7 @@ async function removeEntry(index: number) {
             <v-list-item
               @click.stop="openEditDialog(index)"
             >
-              <template v-if="list.length > 1" v-slot:prepend>
+              <template v-if="list.length > 1 && netConn.wsConnectionStatus === 1" v-slot:prepend>
                 <v-icon class="handle" icon="mdi-unfold-more-horizontal" />
               </template>
 
@@ -193,6 +207,7 @@ async function removeEntry(index: number) {
         :open-dialog="editDialog.open"
         :prefill-text="editDialog.currentEntryText"
         :show-add-next="editDialog.editIndex === -1"
+        :show-changed-warning="editDialog.showChangedWarning"
         @close="editDialog.open = false"
         @next="saveTextEntry($event, true)"
         @save="saveTextEntry($event)"
@@ -200,9 +215,3 @@ async function removeEntry(index: number) {
     </v-list>
   </v-container>
 </template>
-
-<style scoped>
-.non-selectable {
-  user-select: none;
-}
-</style>

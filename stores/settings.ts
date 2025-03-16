@@ -3,11 +3,12 @@ import { useTheme } from "vuetify";
 export const useSettingsStore = defineStore(
     'settings',
     () => {
-        const runtimeConfig = useRuntimeConfig()
+        const runtimeConfig = useRuntimeConfig();
         const vuetifyTheme = useTheme();
 
+        const syncPaused = ref(false);
         const offlineClient = computed(() => {
-            return runtimeConfig.public.offlineMode;
+            return runtimeConfig.public.offlineMode || syncPaused.value;
         });
         const theme = ref('dark');
 
@@ -15,7 +16,7 @@ export const useSettingsStore = defineStore(
             vuetifyTheme.global.name.value = newTheme;
         })
 
-        return { offlineClient, theme };
+        return { offlineClient, syncPaused, theme };
     },
     {
         persist: true

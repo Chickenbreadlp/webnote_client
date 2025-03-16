@@ -59,7 +59,4 @@ function toggleCrossedState(entry: ChecklistEntry) {
 pre {
   font-family: "Roboto", sans-serif;
 }
-.non-selectable {
-  user-select: none;
-}
 </style>

@@ -50,6 +50,7 @@ interface UpdateChange extends CommonChange {
         text: string;
         atTop: boolean;
     }
+    entryRemove?: number;
     entryReorder?: number[];
 }
 interface CreateChange extends CommonChange {
@@ -59,3 +60,16 @@ interface CreateChange extends CommonChange {
 }
 
 export type DocumentChange = DeleteChange | UpdateChange | CreateChange;
+
+// Websocket Connection
+export enum WSReadyState {
+    CONNECTING,
+    OPEN,
+    CLOSING,
+    CLOSED
+}
+export enum WSMessageTypes {
+    CHANGE = 'change',
+    FETCH_LIST = 'fetchList',
+    OFFLINE_CHANGE_SYNC = 'offlineChangeSync'
+}
