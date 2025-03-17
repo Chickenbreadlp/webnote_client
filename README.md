@@ -1,6 +1,6 @@
 # Webnote UI
 Webnote is a Nuxt-based note taking app, intended to run fully inside the browser.  
-The UI can run either standalone (in offline mode) or with an optional synchronization host (configurable using the UIs runtime config).
+The UI can run either standalone (in offline mode) or with an [optional synchronization host](https://github.com/Chickenbreadlp/webnote_srv) (configurable using the UIs runtime config).
 
 Please note that when switching the UI from Offline mode to synced mode *will* delete any changes done in offline mode!  
 If you want just want to pause synchronization for a little bit, you can do so by clicking on the connection status indicator in synced mode.
