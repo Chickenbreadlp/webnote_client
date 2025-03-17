@@ -45,7 +45,7 @@ export const useNetConn = defineStore(
                 let success = false;
                 try {
                     const data = JSON.parse(event.data);
-                    console.log(data);
+                    console.log('WS message received: ', data);
                     switch (data.msgType) {
                         case 'change': {
                             if (data.change && data.change.timestamp) {
@@ -103,7 +103,6 @@ export const useNetConn = defineStore(
                     initialFetchDone = false;
                     ws = new WebSocket(`ws://${requestURL.hostname}:${runtimeConfig.public.apiPort}`);
                     setupWebsocketListeners(ws);
-                    console.log('WS created');
                     wsConnectionStatus.value = checkConnectionStatus();
 
                     wsStatusInterval = setInterval(() => {
@@ -129,10 +128,9 @@ export const useNetConn = defineStore(
 
                         if (wsConnectionStatus.value === WSReadyState.CLOSED && import.meta.client) {
                             const restartTimeout = Math.ceil(4000 + (Math.random() * 2000));
-                            console.log(restartTimeout);
                             createWebSocket(restartTimeout);
                         }
-                    }, 1000);
+                    }, 250);
                 }, startTimeout);
             }
         }
@@ -177,13 +175,13 @@ export const useNetConn = defineStore(
             });
         }
 
-        if (import.meta.server) {
-            // SSR
-        }
-        else if (import.meta.client) {
+        if (import.meta.client) {
             // Client
             if (!syncPaused.value)
                 createWebSocket();
+        }
+        else if (import.meta.server) {
+            // SSR
         }
 
         watch(syncPaused, (newVal) => {

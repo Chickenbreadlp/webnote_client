@@ -2,7 +2,7 @@
 const { $pwa } = useNuxtApp();
 
 onMounted(() => {
-  if ($pwa.offlineReady)
+  if ($pwa?.offlineReady)
     console.log('We are offline ready!');
 })
 </script>

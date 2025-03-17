@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 
 const router = useRouter();
 const documentStore = useDocumentStore();
-const netConn = useNetConn();
+const settingsStore = useSettingsStore();
 
 const crossedClasses = 'text-medium-emphasis text-decoration-line-through';
 
@@ -170,7 +170,7 @@ async function removeEntry(index: number) {
             <v-list-item
               @click.stop="openEditDialog(index)"
             >
-              <template v-if="list.length > 1 && netConn.wsConnectionStatus === 1" v-slot:prepend>
+              <template v-if="list.length > 1 && !settingsStore.offlineClient" v-slot:prepend>
                 <v-icon class="handle" icon="mdi-unfold-more-horizontal" />
               </template>
 
