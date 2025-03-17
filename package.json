@@ -5,7 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate && npx cap sync",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
@@ -16,10 +16,11 @@
   "author": "Chickenbread",
   "license": "MIT",
   "dependencies": {
+    "@capacitor/android": "^7.1.0",
+    "@capacitor/core": "^7.1.0",
     "@mdi/font": "^7.4.47",
     "@nuxt/fonts": "^0.11.0",
     "@pinia/nuxt": "^0.10.1",
-    "@vite-pwa/nuxt": "^0.10.6",
     "luxon": "^3.5.0",
     "nuxt": "^3.16.0",
     "pinia": "^3.0.1",
@@ -29,6 +30,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^7.1.0",
     "@types/luxon": "^3.4.2",
     "vite-plugin-vuetify": "^2.1.0",
     "vuetify": "^3.7.16"

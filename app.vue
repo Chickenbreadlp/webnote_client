@@ -30,7 +30,6 @@ const pageTitle = computed(() => {
 
 <template>
   <NuxtLayout>
-    <pwa-handler />
     <v-app>
       <v-layout>
         <v-navigation-drawer v-model="navOpen" mobile-breakpoint="sm">

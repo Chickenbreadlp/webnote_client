@@ -101,7 +101,7 @@ export const useNetConn = defineStore(
                 wsRestartTimeout = setTimeout(() => {
                     wsRestartTimeout = null;
                     initialFetchDone = false;
-                    ws = new WebSocket(`ws://${requestURL.hostname}:${runtimeConfig.public.apiPort}`);
+                    ws = new WebSocket(`ws://${runtimeConfig.public.apiHost ? runtimeConfig.public.apiHost : requestURL.hostname}:${runtimeConfig.public.apiPort}`);
                     setupWebsocketListeners(ws);
                     wsConnectionStatus.value = checkConnectionStatus();
 

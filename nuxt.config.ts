@@ -15,11 +15,19 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  runtimeConfig: {
+    public: {
+      offlineMode: false,
+      apiPort: 3009,
+      apiHost: ''
+    }
+  },
   nitro: {
     prerender: {
       routes: ['/']
     }
   },
+  ssr: false,
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
@@ -29,8 +37,7 @@ export default defineNuxtConfig({
     },
     '@nuxt/fonts',
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
-    '@vite-pwa/nuxt'
+    'pinia-plugin-persistedstate/nuxt'
   ],
   vite: {
     vue: {
@@ -38,43 +45,5 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
-  },
-  pwa: {
-    registerType: 'autoUpdate',
-    manifest: {
-      name: 'Webnote',
-      short_name: 'Webnote',
-      description: 'A web app for taking notes as either text or checklists',
-      theme_color: '#009688',
-      background_color: '#121212',
-      display: 'standalone',
-      icons: [
-        {
-          src: '/web-app-manifest-192x192.png',
-          sizes: '192x192',
-          type: 'image/png'
-        },
-        {
-          src: '/web-app-manifest-512x512.png',
-          sizes: '512x512',
-          type: 'image/png'
-        },
-      ],
-    },
-    workbox: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-    },
-    client: {
-      periodicSyncForUpdates: 120
-    },
-    devOptions: {
-      navigateFallback: '/'
-    }
-  },
-  runtimeConfig: {
-    public: {
-      offlineMode: false,
-      apiPort: 3009
-    }
   }
 })

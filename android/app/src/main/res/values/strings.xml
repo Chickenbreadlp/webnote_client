@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Webnote</string>
+    <string name="title_activity_main">Webnote</string>
+    <string name="package_name">de.chickenbread.webnote</string>
+    <string name="custom_url_scheme">de.chickenbread.webnote</string>
+</resources>

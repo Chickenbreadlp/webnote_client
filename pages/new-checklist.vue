@@ -34,7 +34,7 @@ watch(title, (newVal) => {
   }
 });
 effect(() => {
-  documentStore.inProgressDocument.changed = title.value !== '' && list.value.length > 0;
+  documentStore.inProgressDocument.changed = title.value !== '';
 });
 
 const editDialog = ref({

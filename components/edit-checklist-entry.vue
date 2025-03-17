@@ -14,16 +14,24 @@ const emit = defineEmits<{
 
 const entryText = ref('');
 
+const inputField = useTemplateRef('editChecklistEntryInput');
+function focusInput() {
+  if (inputField.value) {
+    inputField.value.focus();
+  }
+}
 function nextEntry() {
   emit('next', entryText.value);
   entryText.value = '';
+  focusInput();
 }
 
 effect(() => {
   if (openDialog) {
     entryText.value = prefillText;
+    focusInput();
   }
-})
+});
 </script>
 
 <template>
@@ -39,6 +47,7 @@ effect(() => {
         <v-card-text class="pa-4 pb-2">
           <v-text-field
             v-model="entryText"
+            ref="editChecklistEntryInput"
             label="Label"
             :hide-details="true"
           />

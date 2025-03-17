@@ -5,8 +5,6 @@ const router = useRouter();
 const documentStore = useDocumentStore();
 const settingsStore = useSettingsStore();
 
-const crossedClasses = 'text-medium-emphasis text-decoration-line-through';
-
 const list = ref<ChecklistEntry[]>([]);
 const listIds = computed(() => {
   return list.value.map((item) => item.id);
@@ -36,7 +34,11 @@ watch(documentStore, () => {
       }
     }
 
-    if (editDialog.value.open && !currentEditIndexFound) {
+    if (
+      editDialog.value.open &&
+      editDialog.value.editId !== -1 &&
+      !currentEditIndexFound
+    ) {
       editDialog.value.open = false;
     }
   }

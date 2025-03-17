@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 
 const documentStore = useDocumentStore();
 
-const crossedClasses = 'text-medium-emphasis text-decoration-line-through';
+const crossedClasses = 'text-disabled text-decoration-line-through';
 
 const openDocument = computed(() => {
   return documentStore.currentPageDocument;
