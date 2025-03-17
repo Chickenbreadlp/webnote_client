@@ -74,7 +74,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       offlineMode: false,
-      apiPort: 3001
+      apiPort: 3009
     }
   }
 })
