@@ -16,7 +16,10 @@ const currentPageDocument = computed(() => {
 function saveOpenDocument() {
   documentStore.saveInProgress = true;
 }
+
+const deleteDialogOpen = ref(false);
 async function deleteOpenDocument() {
+  deleteDialogOpen.value = false;
   if (currentPageDocument.value) {
     const deletePayload: DocumentChange = {
       type: 'delete',
@@ -27,6 +30,10 @@ async function deleteOpenDocument() {
     await router.push('/');
   }
 }
+
+watch(route, () => {
+  deleteDialogOpen.value = false;
+}, { deep: true, immediate: true });
 </script>
 
 <template>
@@ -72,7 +79,13 @@ async function deleteOpenDocument() {
     />
     <v-btn
       icon="mdi-delete"
-      @click.stop="deleteOpenDocument()"
+      @click.stop="deleteDialogOpen = true"
     />
   </template>
+
+  <confirmation-dialog
+    :open-dialog="deleteDialogOpen"
+    @cancel="deleteDialogOpen = false"
+    @confirm="deleteOpenDocument()"
+  />
 </template>

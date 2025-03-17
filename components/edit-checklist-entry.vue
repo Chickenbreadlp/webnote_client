@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { openDialog, prefillText, showAddNext } = defineProps<{
+const { openDialog, prefillText } = defineProps<{
   openDialog: boolean;
   prefillText: string;
   showAddNext: boolean;
@@ -35,60 +35,54 @@ effect(() => {
 </script>
 
 <template>
-  <div>
-    <v-dialog
-      :model-value="openDialog"
-      width="70%"
-      min-width="300"
-      max-width="600"
-      persistent
-    >
-      <v-card>
-        <v-card-text class="pa-4 pb-2">
-          <v-text-field
-            v-model="entryText"
-            ref="editChecklistEntryInput"
-            label="Label"
-            :hide-details="true"
+  <v-dialog
+    :model-value="openDialog"
+    width="70%"
+    min-width="300"
+    max-width="600"
+    persistent
+  >
+    <v-card>
+      <v-card-text class="pa-4 pb-2">
+        <v-text-field
+          v-model="entryText"
+          ref="editChecklistEntryInput"
+          label="Text"
+          :hide-details="true"
+        />
+
+        <v-expand-transition>
+          <v-alert
+            v-show="showChangedWarning"
+            type="warning"
+            density="compact"
+            variant="tonal"
+            border="start"
+            text="Eintrag von einem anderen Nutzer bearbeitet"
+            class="rounded-t-0"
           />
+        </v-expand-transition>
+      </v-card-text>
+      <v-card-actions class="px-3 pb-3">
+        <v-btn
+          text="Abbrechen"
+          @click="emit('close')"
+        ></v-btn>
 
-          <v-expand-transition>
-            <v-alert
-              v-show="showChangedWarning"
-              type="warning"
-              density="compact"
-              variant="tonal"
-              border="start"
-              text="Eintrag von einem anderen Nutzer bearbeitet"
-              class="rounded-t-0"
-            />
-          </v-expand-transition>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            text="Cancel"
-            @click="emit('close')"
-          ></v-btn>
+        <v-spacer></v-spacer>
 
-          <v-spacer></v-spacer>
-
-          <v-btn
-            v-if="showAddNext"
-            color="light-blue"
-            text="Add next"
-            @click="nextEntry()"
-          ></v-btn>
-          <v-btn
-            text="Save"
-            color="green"
-            @click="emit('save', entryText)"
-          ></v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+        <v-btn
+          v-if="showAddNext"
+          color="light-blue"
+          text="Nächster"
+          @click="nextEntry()"
+        ></v-btn>
+        <v-btn
+          text="Speichern"
+          color="green"
+          @click="emit('save', entryText)"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
-
-<style scoped>
-
-</style>
